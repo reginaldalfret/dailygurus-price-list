@@ -151,16 +151,16 @@ require_once __DIR__ . '/includes/header.php';
                         </button>
                         <div class="accordion-content">
                             <table class="price-table">
-                                <thead>
+                                <thead class="desktop-only-thead">
                                     <tr>
                                         <th>Produce Item</th>
-                                        <th>Unit</th>
+                                        <th class="desktop-unit-col">Unit</th>
                                         <th style="text-align: right;">Wholesale Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($subcat['products'] as $prod): ?>
-                                        <tr>
+                                        <tr class="produce-row">
                                             <td class="item-name-cell">
                                                 <div class="produce-item-flex">
                                                     <div class="produce-img-wrap">
@@ -168,20 +168,33 @@ require_once __DIR__ . '/includes/header.php';
                                                              alt="<?= e($prod['name']) ?>" 
                                                              class="produce-thumbnail" 
                                                              loading="lazy" 
-                                                             width="34" 
-                                                             height="34" 
+                                                             width="36" 
+                                                             height="36" 
                                                              onerror="this.style.display='none'">
                                                     </div>
                                                     <div class="produce-name-details">
-                                                        <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                        <div class="produce-title-row">
+                                                            <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                        </div>
                                                         <?php if (!empty($prod['tamil_name'])): ?>
                                                             <span class="produce-name-ta" lang="ta"><?= e($prod['tamil_name']) ?></span>
                                                         <?php endif; ?>
+                                                        <div class="produce-meta-mobile">
+                                                            <?php if (!empty($prod['price_unit'] ?: $prod['default_unit'])): ?>
+                                                                <span class="unit-tag-mobile"><?= e($prod['price_unit'] ?: $prod['default_unit']) ?></span>
+                                                            <?php endif; ?>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="item-unit-cell"><span class="unit-tag"><?= e($prod['price_unit'] ?: $prod['default_unit'] ?: 'kg') ?></span></td>
-                                            <td class="item-price-cell"><?= format_price_html($prod['price'], $prod['price_unit'] ?: $prod['default_unit']) ?></td>
+                                            <td class="item-unit-cell desktop-unit-col">
+                                                <span class="unit-tag"><?= e($prod['price_unit'] ?: $prod['default_unit'] ?: 'kg') ?></span>
+                                            </td>
+                                            <td class="item-price-cell">
+                                                <div class="price-box-wrapper">
+                                                    <?= format_price_html($prod['price'], $prod['price_unit'] ?: $prod['default_unit']) ?>
+                                                </div>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -218,16 +231,16 @@ require_once __DIR__ . '/includes/header.php';
                         </button>
                         <div class="accordion-content">
                             <table class="price-table">
-                                <thead>
+                                <thead class="desktop-only-thead">
                                     <tr>
                                         <th>Produce Item</th>
-                                        <th>Unit</th>
+                                        <th class="desktop-unit-col">Unit</th>
                                         <th style="text-align: right;">Wholesale Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($subcat['products'] as $prod): ?>
-                                        <tr>
+                                        <tr class="produce-row">
                                             <td class="item-name-cell">
                                                 <div class="produce-item-flex">
                                                     <div class="produce-img-wrap">
@@ -235,20 +248,33 @@ require_once __DIR__ . '/includes/header.php';
                                                              alt="<?= e($prod['name']) ?>" 
                                                              class="produce-thumbnail" 
                                                              loading="lazy" 
-                                                             width="34" 
-                                                             height="34" 
+                                                             width="36" 
+                                                             height="36" 
                                                              onerror="this.style.display='none'">
                                                     </div>
                                                     <div class="produce-name-details">
-                                                        <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                        <div class="produce-title-row">
+                                                            <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                        </div>
                                                         <?php if (!empty($prod['tamil_name'])): ?>
                                                             <span class="produce-name-ta" lang="ta"><?= e($prod['tamil_name']) ?></span>
                                                         <?php endif; ?>
+                                                        <div class="produce-meta-mobile">
+                                                            <?php if (!empty($prod['price_unit'] ?: $prod['default_unit'])): ?>
+                                                                <span class="unit-tag-mobile"><?= e($prod['price_unit'] ?: $prod['default_unit']) ?></span>
+                                                            <?php endif; ?>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="item-unit-cell"><span class="unit-tag"><?= e($prod['price_unit'] ?: $prod['default_unit'] ?: 'kg') ?></span></td>
-                                            <td class="item-price-cell"><?= format_price_html($prod['price'], $prod['price_unit'] ?: $prod['default_unit']) ?></td>
+                                            <td class="item-unit-cell desktop-unit-col">
+                                                <span class="unit-tag"><?= e($prod['price_unit'] ?: $prod['default_unit'] ?: 'kg') ?></span>
+                                            </td>
+                                            <td class="item-price-cell">
+                                                <div class="price-box-wrapper">
+                                                    <?= format_price_html($prod['price'], $prod['price_unit'] ?: $prod['default_unit']) ?>
+                                                </div>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>

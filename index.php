@@ -35,19 +35,21 @@ require_once __DIR__ . '/includes/header.php';
             <h1 class="hero-main-title">dailygurus price list</h1>
             <p class="hero-subtitle">Daily Wholesale Price List for Vegetables &amp; Fruits</p>
             
-            <div class="hero-date-pill-wrap">
-                <div class="date-badge-pill">
+            <!-- Mobile & Desktop Date Card -->
+            <div class="hero-date-card">
+                <div class="date-card-eyebrow">TODAY'S WHOLESALE PRICES</div>
+                <div class="date-card-main">
                     <span class="cal-icon">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     </span>
-                    <span><strong><?= e(format_date_long($active_date)) ?></strong></span>
+                    <span class="date-card-text"><?= e(format_date_long($active_date)) ?></span>
                     <?php if (!$is_historical_view): ?>
                         <span class="pulse-indicator">
                             <span class="pulse-dot"></span>
                             Updated Today
                         </span>
                     <?php else: ?>
-                        <span class="pulse-indicator" style="background-color: #FEF3C7; color: #92400E;">
+                        <span class="pulse-indicator pulse-archive">
                             Archive View
                         </span>
                     <?php endif; ?>
@@ -66,14 +68,14 @@ require_once __DIR__ . '/includes/header.php';
             </div>
         <?php endif; ?>
 
-        <!-- Hero Produce Banner -->
+        <!-- Hero Produce Banner (Hidden on compact mobile) -->
         <div class="hero-banner-card">
             <img src="assets/images/hero-produce.jpg" alt="Fresh Farm Produce Wholesale Basket" width="1000" height="428" loading="eager">
         </div>
     </div>
 </section>
 
-<!-- Category Quick Cards Section -->
+<!-- Category Quick Cards Section (2 Equal Columns on Mobile) -->
 <section class="quick-cards-section">
     <div class="container">
         <div class="quick-cards-grid">
@@ -83,10 +85,11 @@ require_once __DIR__ . '/includes/header.php';
                     <img src="assets/images/veg-crate.jpg" alt="Vegetables Wholesale Prices" width="96" height="96" loading="lazy">
                 </div>
                 <div class="quick-card-body">
-                    <h3>Vegetables Wholesale Prices</h3>
-                    <p><?= $stats['veg_count'] ?> varieties &bull; Tomato, Onion, Potato, Greens &amp; more</p>
+                    <div class="quick-card-badge">🥬 VEGETABLES</div>
+                    <h3>Vegetables Wholesale</h3>
+                    <p><?= $stats['veg_count'] ?> varieties &bull; Mandi Rates</p>
                     <span class="quick-card-btn">
-                        View Prices <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        View Prices <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </span>
                 </div>
             </a>
@@ -97,10 +100,11 @@ require_once __DIR__ . '/includes/header.php';
                     <img src="assets/images/fruit-basket.jpg" alt="Fruits Wholesale Prices" width="96" height="96" loading="lazy">
                 </div>
                 <div class="quick-card-body">
-                    <h3>Fruits Wholesale Prices</h3>
-                    <p><?= $stats['fruit_count'] ?> varieties &bull; Banana, Mango, Papaya &amp; more</p>
+                    <div class="quick-card-badge badge-fruit-alt">🍎 FRUITS</div>
+                    <h3>Fruits Wholesale</h3>
+                    <p><?= $stats['fruit_count'] ?> varieties &bull; Mandi Rates</p>
                     <span class="quick-card-btn">
-                        View Prices <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        View Prices <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </span>
                 </div>
             </a>
@@ -108,14 +112,49 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<!-- Sticky Search Bar Section -->
-<section class="search-section">
+<!-- Sticky Mobile & Desktop Category Jump Bar -->
+<nav class="sticky-category-bar" id="stickyCategoryBar" aria-label="Quick Category Navigation">
+    <div class="container sticky-category-container">
+        <div class="category-pills-scroll">
+            <a href="#vegetables" class="cat-pill active" data-target="vegetables">
+                <span>🥦</span> Vegetables
+            </a>
+            <a href="#accordion-tomato" class="cat-pill" data-target="accordion-tomato">
+                <span>🍅</span> Tomato
+            </a>
+            <a href="#accordion-onion" class="cat-pill" data-target="accordion-onion">
+                <span>🧅</span> Onion
+            </a>
+            <a href="#accordion-potato" class="cat-pill" data-target="accordion-potato">
+                <span>🥔</span> Potato
+            </a>
+            <a href="#accordion-greens-keerai" class="cat-pill" data-target="accordion-greens-keerai">
+                <span>🌿</span> Greens
+            </a>
+            <a href="#accordion-garlic" class="cat-pill" data-target="accordion-garlic">
+                <span>🧄</span> Garlic
+            </a>
+            <a href="#fruits" class="cat-pill cat-pill-fruit" data-target="fruits">
+                <span>🍎</span> Fruits
+            </a>
+            <a href="#accordion-banana" class="cat-pill cat-pill-fruit" data-target="accordion-banana">
+                <span>🍌</span> Banana
+            </a>
+            <a href="#accordion-mango" class="cat-pill cat-pill-fruit" data-target="accordion-mango">
+                <span>🥭</span> Mango
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Search Bar Section -->
+<section class="search-section" id="searchSection">
     <div class="container">
         <div class="search-container-box">
             <div class="search-icon-wrap">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </div>
-            <input type="text" id="priceSearchInput" class="search-input" placeholder="Search vegetables, fruits or prices... (Press '/' to focus)" aria-label="Search produce items and rates">
+            <input type="text" id="priceSearchInput" class="search-input" placeholder="Search vegetables, fruits or prices... (Press '/' to focus)" aria-label="Search produce items and rates" autocomplete="off">
             <span class="search-count-badge" id="searchCountBadge"></span>
             <button type="button" id="searchClearBtn" class="search-clear-btn" aria-label="Clear search">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -162,17 +201,17 @@ require_once __DIR__ . '/includes/header.php';
 
                         <div class="accordion-content" id="panel-<?= e($subcat['slug']) ?>" role="region">
                             <table class="price-table">
-                                <thead>
+                                <thead class="desktop-only-thead">
                                     <tr>
                                         <th>Produce Item</th>
-                                        <th>Unit</th>
+                                        <th class="desktop-unit-col">Unit</th>
                                         <th style="text-align: right;">Wholesale Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php if (!empty($subcat['products'])): ?>
                                         <?php foreach ($subcat['products'] as $prod): ?>
-                                            <tr>
+                                            <tr class="produce-row">
                                                 <td class="item-name-cell">
                                                     <div class="produce-item-flex">
                                                         <div class="produce-img-wrap">
@@ -180,22 +219,29 @@ require_once __DIR__ . '/includes/header.php';
                                                                  alt="<?= e($prod['name']) ?>" 
                                                                  class="produce-thumbnail" 
                                                                  loading="lazy" 
-                                                                 width="34" 
-                                                                 height="34" 
+                                                                 width="36" 
+                                                                 height="36" 
                                                                  onerror="this.style.display='none'">
                                                         </div>
                                                         <div class="produce-name-details">
-                                                            <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                            <div class="produce-title-row">
+                                                                <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                            </div>
                                                             <?php if (!empty($prod['tamil_name'])): ?>
                                                                 <span class="produce-name-ta" lang="ta"><?= e($prod['tamil_name']) ?></span>
                                                             <?php endif; ?>
-                                                            <?php if (!empty($prod['price_notes'])): ?>
-                                                                <small class="produce-notes"><?= e($prod['price_notes']) ?></small>
-                                                            <?php endif; ?>
+                                                            <div class="produce-meta-mobile">
+                                                                <?php if (!empty($prod['price_unit'] ?: $prod['default_unit'])): ?>
+                                                                    <span class="unit-tag-mobile"><?= e($prod['price_unit'] ?: $prod['default_unit']) ?></span>
+                                                                <?php endif; ?>
+                                                                <?php if (!empty($prod['price_notes'])): ?>
+                                                                    <span class="produce-notes-pill"><?= e($prod['price_notes']) ?></span>
+                                                                <?php endif; ?>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="item-unit-cell">
+                                                <td class="item-unit-cell desktop-unit-col">
                                                     <?php if (!empty($prod['price_unit'] ?: $prod['default_unit'])): ?>
                                                         <span class="unit-tag"><?= e($prod['price_unit'] ?: $prod['default_unit']) ?></span>
                                                     <?php else: ?>
@@ -203,7 +249,9 @@ require_once __DIR__ . '/includes/header.php';
                                                     <?php endif; ?>
                                                 </td>
                                                 <td class="item-price-cell">
-                                                    <?= format_price_html($prod['price'], $prod['price_unit'] ?: $prod['default_unit']) ?>
+                                                    <div class="price-box-wrapper">
+                                                        <?= format_price_html($prod['price'], $prod['price_unit'] ?: $prod['default_unit']) ?>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
@@ -252,17 +300,17 @@ require_once __DIR__ . '/includes/header.php';
 
                         <div class="accordion-content" id="panel-<?= e($subcat['slug']) ?>" role="region">
                             <table class="price-table">
-                                <thead>
+                                <thead class="desktop-only-thead">
                                     <tr>
                                         <th>Produce Item</th>
-                                        <th>Unit</th>
+                                        <th class="desktop-unit-col">Unit</th>
                                         <th style="text-align: right;">Wholesale Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php if (!empty($subcat['products'])): ?>
                                         <?php foreach ($subcat['products'] as $prod): ?>
-                                            <tr>
+                                            <tr class="produce-row">
                                                 <td class="item-name-cell">
                                                     <div class="produce-item-flex">
                                                         <div class="produce-img-wrap">
@@ -270,22 +318,29 @@ require_once __DIR__ . '/includes/header.php';
                                                                  alt="<?= e($prod['name']) ?>" 
                                                                  class="produce-thumbnail" 
                                                                  loading="lazy" 
-                                                                 width="34" 
-                                                                 height="34" 
+                                                                 width="36" 
+                                                                 height="36" 
                                                                  onerror="this.style.display='none'">
                                                         </div>
                                                         <div class="produce-name-details">
-                                                            <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                            <div class="produce-title-row">
+                                                                <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                            </div>
                                                             <?php if (!empty($prod['tamil_name'])): ?>
                                                                 <span class="produce-name-ta" lang="ta"><?= e($prod['tamil_name']) ?></span>
                                                             <?php endif; ?>
-                                                            <?php if (!empty($prod['price_notes'])): ?>
-                                                                <small class="produce-notes"><?= e($prod['price_notes']) ?></small>
-                                                            <?php endif; ?>
+                                                            <div class="produce-meta-mobile">
+                                                                <?php if (!empty($prod['price_unit'] ?: $prod['default_unit'])): ?>
+                                                                    <span class="unit-tag-mobile"><?= e($prod['price_unit'] ?: $prod['default_unit']) ?></span>
+                                                                <?php endif; ?>
+                                                                <?php if (!empty($prod['price_notes'])): ?>
+                                                                    <span class="produce-notes-pill"><?= e($prod['price_notes']) ?></span>
+                                                                <?php endif; ?>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="item-unit-cell">
+                                                <td class="item-unit-cell desktop-unit-col">
                                                     <?php if (!empty($prod['price_unit'] ?: $prod['default_unit'])): ?>
                                                         <span class="unit-tag"><?= e($prod['price_unit'] ?: $prod['default_unit']) ?></span>
                                                     <?php else: ?>
@@ -293,7 +348,9 @@ require_once __DIR__ . '/includes/header.php';
                                                     <?php endif; ?>
                                                 </td>
                                                 <td class="item-price-cell">
-                                                    <?= format_price_html($prod['price'], $prod['price_unit'] ?: $prod['default_unit']) ?>
+                                                    <div class="price-box-wrapper">
+                                                        <?= format_price_html($prod['price'], $prod['price_unit'] ?: $prod['default_unit']) ?>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

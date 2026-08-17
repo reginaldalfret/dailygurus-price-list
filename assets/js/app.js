@@ -7,16 +7,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. Mobile Menu Drawer Navigation
   initMobileDrawer();
 
-  // 2. Accordions Expand / Collapse
+  // 2. Accordions Expand / Collapse (Smart on mobile)
   initAccordions();
 
   // 3. Section Toggles (Expand All / Collapse All)
   initSectionToggles();
 
-  // 4. Live Client-Side Search & Filtering
+  // 4. Sticky Category Jump Navigation
+  initStickyCategoryBar();
+
+  // 5. Live Client-Side Search & Filtering
   initLiveSearch();
 
-  // 5. Sticky Header & Back to Top
+  // 6. Sticky Header & Back to Top
   initScrollBehaviors();
 });
 
@@ -71,6 +74,26 @@ function initMobileDrawer() {
  */
 function initAccordions() {
   const accordionHeaders = document.querySelectorAll('.accordion-header');
+  const isMobile = window.innerWidth <= 768;
+
+  // On initial mobile page load, keep first 2 categories open and collapse the rest for effortless scanning
+  if (isMobile) {
+    const allCards = document.querySelectorAll('.accordion-card');
+    allCards.forEach((card, index) => {
+      // Keep only first 2 cards open on initial mobile view
+      if (index > 1) {
+        card.classList.remove('is-open');
+        const header = card.querySelector('.accordion-header');
+        if (header) header.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    const vegToggleBtn = document.getElementById('toggleAllVegBtn');
+    if (vegToggleBtn) {
+      const btnText = vegToggleBtn.querySelector('.toggle-text');
+      if (btnText) btnText.textContent = 'Expand All';
+    }
+  }
 
   accordionHeaders.forEach(header => {
     header.addEventListener('click', function(e) {
@@ -145,6 +168,48 @@ function initSectionToggles() {
       }
     });
   }
+}
+
+/**
+ * Sticky Category Jump Navigation & Scroll Tracking
+ */
+function initStickyCategoryBar() {
+  const catPills = document.querySelectorAll('.cat-pill');
+  if (!catPills.length) return;
+
+  catPills.forEach(pill => {
+    pill.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.dataset.target || this.getAttribute('href').replace('#', '');
+      const targetEl = document.getElementById(targetId);
+
+      if (!targetEl) return;
+
+      // If targeting an accordion card, make sure it is open
+      if (targetEl.classList.contains('accordion-card')) {
+        targetEl.classList.add('is-open');
+        const header = targetEl.querySelector('.accordion-header');
+        if (header) header.setAttribute('aria-expanded', 'true');
+      }
+
+      // Calculate scroll offset accounting for sticky header & sticky nav bar
+      const isMobile = window.innerWidth <= 768;
+      const headerOffset = isMobile ? 115 : 130;
+      const targetPos = targetEl.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+      window.scrollTo({
+        top: targetPos,
+        behavior: 'smooth'
+      });
+
+      // Update active pill
+      catPills.forEach(p => p.classList.remove('active'));
+      this.classList.add('active');
+
+      // Scroll the active pill into view in the horizontal pill bar
+      this.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    });
+  });
 }
 
 /**
