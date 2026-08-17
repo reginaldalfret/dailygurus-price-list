@@ -40,6 +40,14 @@ backups/
 *.old
 *~
 
+# Temporary scratch files and test profiles
+scratch/
+scratch*/
+scratch_chrome_profile/
+scratch_screenshots/
+*.js.map
+*.css.map
+
 # Operating System & IDE Files
 .DS_Store
 Thumbs.db
