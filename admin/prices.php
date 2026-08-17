@@ -276,7 +276,20 @@ require_once __DIR__ . '/../includes/admin_header.php';
                                     <?php foreach ($subcat['products'] as $prod): ?>
                                         <tr>
                                             <td>
-                                                <strong style="color: var(--text-main);"><?= htmlspecialchars($prod['name'] ?? '') ?></strong>
+                                                <div style="display: flex; align-items: center; gap: 10px;">
+                                                    <div style="width: 32px; height: 32px; flex-shrink: 0; background: #f1f5f9; border-radius: 8px; padding: 3px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0;">
+                                                        <img src="../<?= htmlspecialchars($prod['image_url'] ?: 'assets/images/produce/' . ($prod['icon'] ?: 'generic-veg.svg')) ?>" 
+                                                             alt="" 
+                                                             style="width: 100%; height: 100%; object-fit: contain;" 
+                                                             onerror="this.style.display='none'">
+                                                    </div>
+                                                    <div>
+                                                        <strong style="color: var(--text-main); font-size: 0.92rem;"><?= htmlspecialchars($prod['name'] ?? '') ?></strong>
+                                                        <?php if (!empty($prod['tamil_name'])): ?>
+                                                            <div style="font-size: 0.8rem; color: #16a34a; font-weight: 500;"><?= htmlspecialchars($prod['tamil_name']) ?></div>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td>
                                                 <div class="price-input-cell">

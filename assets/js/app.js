@@ -160,11 +160,15 @@ function initLiveSearch() {
 
   if (!searchInput) return;
 
-  // Store original item texts for clean highlight restoration
+  // Store original HTML and text for clean highlight restoration
   allRows.forEach(row => {
-    const nameCell = row.querySelector('.item-name-cell');
-    if (nameCell && !nameCell.dataset.originalText) {
-      nameCell.dataset.originalText = nameCell.textContent.trim();
+    const enSpan = row.querySelector('.produce-name-en');
+    const taSpan = row.querySelector('.produce-name-ta');
+    if (enSpan && !enSpan.dataset.originalText) {
+      enSpan.dataset.originalText = enSpan.textContent.trim();
+    }
+    if (taSpan && !taSpan.dataset.originalText) {
+      taSpan.dataset.originalText = taSpan.textContent.trim();
     }
   });
 
@@ -182,9 +186,13 @@ function initLiveSearch() {
 
       allRows.forEach(row => {
         row.style.display = '';
-        const nameCell = row.querySelector('.item-name-cell');
-        if (nameCell && nameCell.dataset.originalText) {
-          nameCell.textContent = nameCell.dataset.originalText;
+        const enSpan = row.querySelector('.produce-name-en');
+        const taSpan = row.querySelector('.produce-name-ta');
+        if (enSpan && enSpan.dataset.originalText) {
+          enSpan.textContent = enSpan.dataset.originalText;
+        }
+        if (taSpan && taSpan.dataset.originalText) {
+          taSpan.textContent = taSpan.dataset.originalText;
         }
       });
 
@@ -202,29 +210,42 @@ function initLiveSearch() {
       let cardMatches = 0;
 
       rows.forEach(row => {
-        const nameCell = row.querySelector('.item-name-cell');
+        const enSpan = row.querySelector('.produce-name-en');
+        const taSpan = row.querySelector('.produce-name-ta');
         const priceCell = row.querySelector('.item-price-cell');
-        const originalName = nameCell ? nameCell.dataset.originalText : '';
-        const nameLower = originalName.toLowerCase();
+        
+        const origEn = enSpan ? (enSpan.dataset.originalText || enSpan.textContent.trim()) : '';
+        const origTa = taSpan ? (taSpan.dataset.originalText || taSpan.textContent.trim()) : '';
+        const enLower = origEn.toLowerCase();
+        const taLower = origTa.toLowerCase();
         const priceText = priceCell ? priceCell.textContent.toLowerCase() : '';
 
-        const isMatch = nameLower.includes(query) || priceText.includes(query);
+        const isMatch = enLower.includes(query) || taLower.includes(query) || priceText.includes(query);
 
         if (isMatch) {
           row.style.display = '';
           cardMatches++;
           totalMatches++;
 
-          // Highlight matching text in name
-          if (nameCell && nameLower.includes(query)) {
+          // Highlight matching text in English name
+          if (enSpan && enLower.includes(query)) {
             const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
-            nameCell.innerHTML = originalName.replace(regex, '<mark class="search-highlight">$1</mark>');
-          } else if (nameCell) {
-            nameCell.textContent = originalName;
+            enSpan.innerHTML = origEn.replace(regex, '<mark class="search-highlight">$1</mark>');
+          } else if (enSpan) {
+            enSpan.textContent = origEn;
+          }
+
+          // Highlight matching text in Tamil name
+          if (taSpan && taLower.includes(query)) {
+            const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+            taSpan.innerHTML = origTa.replace(regex, '<mark class="search-highlight">$1</mark>');
+          } else if (taSpan) {
+            taSpan.textContent = origTa;
           }
         } else {
           row.style.display = 'none';
-          if (nameCell) nameCell.textContent = originalName;
+          if (enSpan) enSpan.textContent = origEn;
+          if (taSpan) taSpan.textContent = origTa;
         }
       });
 

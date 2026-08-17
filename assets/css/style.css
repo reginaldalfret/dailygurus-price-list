@@ -1006,11 +1006,72 @@ ul, ol {
 .item-name-cell {
   font-weight: 600;
   color: var(--color-text-main);
+  padding: 10px 16px;
 }
 
-.item-unit-cell {
-  color: var(--color-text-muted);
-  font-size: 13.5px;
+.produce-item-flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.produce-img-wrap {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 4px;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.price-table tr:hover .produce-img-wrap {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.produce-thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.produce-name-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.produce-name-en {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  line-height: 1.3;
+}
+
+.produce-name-ta {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #15803D; /* Fresh herbal green for Tamil */
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+.card-fruit-theme .produce-name-ta {
+  color: #EA580C; /* Citrus warm orange for fruit Tamil names */
+}
+
+.produce-notes {
+  display: block;
+  color: var(--color-text-subtle);
+  font-size: 11.5px;
+  margin-top: 1px;
 }
 
 .unit-tag {

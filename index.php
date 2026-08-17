@@ -174,10 +174,26 @@ require_once __DIR__ . '/includes/header.php';
                                         <?php foreach ($subcat['products'] as $prod): ?>
                                             <tr>
                                                 <td class="item-name-cell">
-                                                    <?= e($prod['name']) ?>
-                                                    <?php if (!empty($prod['price_notes'])): ?>
-                                                        <small style="display: block; color: var(--color-text-subtle); font-size: 12px;"><?= e($prod['price_notes']) ?></small>
-                                                    <?php endif; ?>
+                                                    <div class="produce-item-flex">
+                                                        <div class="produce-img-wrap">
+                                                            <img src="<?= e($prod['image_url'] ?: 'assets/images/produce/' . ($prod['icon'] ?: 'generic-veg.svg')) ?>" 
+                                                                 alt="<?= e($prod['name']) ?>" 
+                                                                 class="produce-thumbnail" 
+                                                                 loading="lazy" 
+                                                                 width="34" 
+                                                                 height="34" 
+                                                                 onerror="this.style.display='none'">
+                                                        </div>
+                                                        <div class="produce-name-details">
+                                                            <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                            <?php if (!empty($prod['tamil_name'])): ?>
+                                                                <span class="produce-name-ta" lang="ta"><?= e($prod['tamil_name']) ?></span>
+                                                            <?php endif; ?>
+                                                            <?php if (!empty($prod['price_notes'])): ?>
+                                                                <small class="produce-notes"><?= e($prod['price_notes']) ?></small>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td class="item-unit-cell">
                                                     <?php if (!empty($prod['price_unit'] ?: $prod['default_unit'])): ?>
@@ -248,10 +264,26 @@ require_once __DIR__ . '/includes/header.php';
                                         <?php foreach ($subcat['products'] as $prod): ?>
                                             <tr>
                                                 <td class="item-name-cell">
-                                                    <?= e($prod['name']) ?>
-                                                    <?php if (!empty($prod['price_notes'])): ?>
-                                                        <small style="display: block; color: var(--color-text-subtle); font-size: 12px;"><?= e($prod['price_notes']) ?></small>
-                                                    <?php endif; ?>
+                                                    <div class="produce-item-flex">
+                                                        <div class="produce-img-wrap">
+                                                            <img src="<?= e($prod['image_url'] ?: 'assets/images/produce/' . ($prod['icon'] ?: 'generic-fruit.svg')) ?>" 
+                                                                 alt="<?= e($prod['name']) ?>" 
+                                                                 class="produce-thumbnail" 
+                                                                 loading="lazy" 
+                                                                 width="34" 
+                                                                 height="34" 
+                                                                 onerror="this.style.display='none'">
+                                                        </div>
+                                                        <div class="produce-name-details">
+                                                            <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                            <?php if (!empty($prod['tamil_name'])): ?>
+                                                                <span class="produce-name-ta" lang="ta"><?= e($prod['tamil_name']) ?></span>
+                                                            <?php endif; ?>
+                                                            <?php if (!empty($prod['price_notes'])): ?>
+                                                                <small class="produce-notes"><?= e($prod['price_notes']) ?></small>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td class="item-unit-cell">
                                                     <?php if (!empty($prod['price_unit'] ?: $prod['default_unit'])): ?>

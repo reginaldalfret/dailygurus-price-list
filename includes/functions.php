@@ -248,7 +248,7 @@ function get_prices_by_date(PDO $db, string $date): array {
 
         // Direct products (no subcat)
         $direct_stmt = $db->prepare("
-            SELECT p.id as product_id, p.id, p.name, p.default_unit, p.display_order, p.active,
+            SELECT p.id as product_id, p.id, p.name, p.tamil_name, p.image_url, p.icon, p.default_unit, p.display_order, p.active,
                    dp.price, dp.unit as price_unit, dp.notes as price_notes
             FROM products p
             LEFT JOIN daily_prices dp ON p.id = dp.product_id AND dp.price_date = ?
@@ -277,7 +277,7 @@ function get_prices_by_date(PDO $db, string $date): array {
         foreach ($subcats_raw as $subcat) {
             $subcat_id = $subcat['id'];
             $prod_stmt = $db->prepare("
-                SELECT p.id as product_id, p.id, p.name, p.default_unit, p.display_order, p.active,
+                SELECT p.id as product_id, p.id, p.name, p.tamil_name, p.image_url, p.icon, p.default_unit, p.display_order, p.active,
                        dp.price, dp.unit as price_unit, dp.notes as price_notes
                 FROM products p
                 LEFT JOIN daily_prices dp ON p.id = dp.product_id AND dp.price_date = ?

@@ -161,7 +161,25 @@ require_once __DIR__ . '/includes/header.php';
                                 <tbody>
                                     <?php foreach ($subcat['products'] as $prod): ?>
                                         <tr>
-                                            <td class="item-name-cell"><?= e($prod['name']) ?></td>
+                                            <td class="item-name-cell">
+                                                <div class="produce-item-flex">
+                                                    <div class="produce-img-wrap">
+                                                        <img src="<?= e($prod['image_url'] ?: 'assets/images/produce/' . ($prod['icon'] ?: 'generic-veg.svg')) ?>" 
+                                                             alt="<?= e($prod['name']) ?>" 
+                                                             class="produce-thumbnail" 
+                                                             loading="lazy" 
+                                                             width="34" 
+                                                             height="34" 
+                                                             onerror="this.style.display='none'">
+                                                    </div>
+                                                    <div class="produce-name-details">
+                                                        <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                        <?php if (!empty($prod['tamil_name'])): ?>
+                                                            <span class="produce-name-ta" lang="ta"><?= e($prod['tamil_name']) ?></span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                            </td>
                                             <td class="item-unit-cell"><span class="unit-tag"><?= e($prod['price_unit'] ?: $prod['default_unit'] ?: 'kg') ?></span></td>
                                             <td class="item-price-cell"><?= format_price_html($prod['price'], $prod['price_unit'] ?: $prod['default_unit']) ?></td>
                                         </tr>
@@ -210,7 +228,25 @@ require_once __DIR__ . '/includes/header.php';
                                 <tbody>
                                     <?php foreach ($subcat['products'] as $prod): ?>
                                         <tr>
-                                            <td class="item-name-cell"><?= e($prod['name']) ?></td>
+                                            <td class="item-name-cell">
+                                                <div class="produce-item-flex">
+                                                    <div class="produce-img-wrap">
+                                                        <img src="<?= e($prod['image_url'] ?: 'assets/images/produce/' . ($prod['icon'] ?: 'generic-fruit.svg')) ?>" 
+                                                             alt="<?= e($prod['name']) ?>" 
+                                                             class="produce-thumbnail" 
+                                                             loading="lazy" 
+                                                             width="34" 
+                                                             height="34" 
+                                                             onerror="this.style.display='none'">
+                                                    </div>
+                                                    <div class="produce-name-details">
+                                                        <span class="produce-name-en"><?= e($prod['name']) ?></span>
+                                                        <?php if (!empty($prod['tamil_name'])): ?>
+                                                            <span class="produce-name-ta" lang="ta"><?= e($prod['tamil_name']) ?></span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                            </td>
                                             <td class="item-unit-cell"><span class="unit-tag"><?= e($prod['price_unit'] ?: $prod['default_unit'] ?: 'kg') ?></span></td>
                                             <td class="item-price-cell"><?= format_price_html($prod['price'], $prod['price_unit'] ?: $prod['default_unit']) ?></td>
                                         </tr>

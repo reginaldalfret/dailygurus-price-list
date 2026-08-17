@@ -26,19 +26,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'add') {
         $name = trim($_POST['name'] ?? '');
+        $tamil_name = trim($_POST['tamil_name'] ?? '');
         $cat_id = (int)($_POST['category_id'] ?? 1);
         $subcat_id = (int)($_POST['subcategory_id'] ?? 0) ?: null;
         $default_unit = trim($_POST['default_unit'] ?? '');
         $display_order = (int)($_POST['display_order'] ?? 0);
         $active = isset($_POST['active']) ? 1 : 0;
+        $icon = ($cat_id == 2) ? 'generic-fruit.svg' : 'generic-veg.svg';
+        $image_url = 'assets/images/produce/' . $icon;
 
         if (!empty($name)) {
             try {
                 $stmt = $db->prepare("
-                    INSERT INTO products (category_id, subcategory_id, name, default_unit, display_order, active)
-                    VALUES (?, ?, ?, ?, ?, ?)
+                    INSERT INTO products (category_id, subcategory_id, name, tamil_name, image_url, icon, default_unit, display_order, active)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ");
-                $stmt->execute([$cat_id, $subcat_id, $name, $default_unit, $display_order, $active]);
+                $stmt->execute([$cat_id, $subcat_id, $name, $tamil_name, $image_url, $icon, $default_unit, $display_order, $active]);
                 set_flash('success', "Product '{$name}' created successfully.");
             } catch (Exception $e) {
                 set_flash('error', 'Error creating product: ' . $e->getMessage());
@@ -53,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'edit') {
         $id = (int)($_POST['product_id'] ?? 0);
         $name = trim($_POST['name'] ?? '');
+        $tamil_name = trim($_POST['tamil_name'] ?? '');
         $cat_id = (int)($_POST['category_id'] ?? 1);
         $subcat_id = (int)($_POST['subcategory_id'] ?? 0) ?: null;
         $default_unit = trim($_POST['default_unit'] ?? '');
@@ -63,10 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $stmt = $db->prepare("
                     UPDATE products 
-                    SET category_id = ?, subcategory_id = ?, name = ?, default_unit = ?, display_order = ?, active = ?
+                    SET category_id = ?, subcategory_id = ?, name = ?, tamil_name = ?, default_unit = ?, display_order = ?, active = ?
                     WHERE id = ?
                 ");
-                $stmt->execute([$cat_id, $subcat_id, $name, $default_unit, $display_order, $active, $id]);
+                $stmt->execute([$cat_id, $subcat_id, $name, $tamil_name, $default_unit, $display_order, $active, $id]);
                 set_flash('success', "Product '{$name}' updated successfully.");
             } catch (Exception $e) {
                 set_flash('error', 'Error updating product: ' . $e->getMessage());
@@ -200,7 +204,20 @@ require_once __DIR__ . '/../includes/admin_header.php';
                         <tr>
                             <td style="color: var(--text-muted); font-size: 0.8rem;"><?= $idx++ ?></td>
                             <td>
-                                <strong style="color: var(--text-main); font-size: 0.92rem;"><?= htmlspecialchars($prod['name']) ?></strong>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 32px; height: 32px; flex-shrink: 0; background: #f1f5f9; border-radius: 8px; padding: 3px; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0;">
+                                        <img src="../<?= htmlspecialchars($prod['image_url'] ?: 'assets/images/produce/' . ($prod['icon'] ?: 'generic-veg.svg')) ?>" 
+                                             alt="" 
+                                             style="width: 100%; height: 100%; object-fit: contain;" 
+                                             onerror="this.style.display='none'">
+                                    </div>
+                                    <div>
+                                        <strong style="color: var(--text-main); font-size: 0.92rem;"><?= htmlspecialchars($prod['name']) ?></strong>
+                                        <?php if (!empty($prod['tamil_name'])): ?>
+                                            <div style="font-size: 0.8rem; color: #16a34a; font-weight: 500;"><?= htmlspecialchars($prod['tamil_name']) ?></div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             </td>
                             <td>
                                 <span class="badge <?= $prod['category_type'] === 'fruit' ? 'badge-fruit' : 'badge-veg' ?>">
@@ -267,9 +284,16 @@ require_once __DIR__ . '/../includes/admin_header.php';
             <input type="hidden" name="action" value="add">
 
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Product Name <span class="required">*</span></label>
-                    <input type="text" name="name" class="form-control" placeholder="e.g. Tomato big crates (premium)" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Product Name (English) <span class="required">*</span></label>
+                        <input type="text" name="name" class="form-control" placeholder="e.g. Tomato big crates (premium)" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tamil Name (தமிழ் பெயர்)</label>
+                        <input type="text" name="tamil_name" class="form-control" placeholder="e.g. தக்காளி பெரிய கிரேட்">
+                    </div>
                 </div>
 
                 <div class="form-row">
@@ -338,9 +362,16 @@ require_once __DIR__ . '/../includes/admin_header.php';
             <input type="hidden" name="product_id" id="edit_product_id" value="">
 
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Product Name <span class="required">*</span></label>
-                    <input type="text" name="name" id="edit_name" class="form-control" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Product Name (English) <span class="required">*</span></label>
+                        <input type="text" name="name" id="edit_name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tamil Name (தமிழ் பெயர்)</label>
+                        <input type="text" name="tamil_name" id="edit_tamil_name" class="form-control" placeholder="e.g. தக்காளி பெரிய கிரேட்">
+                    </div>
                 </div>
 
                 <div class="form-row">
@@ -400,6 +431,7 @@ require_once __DIR__ . '/../includes/admin_header.php';
 function editProduct(prod) {
     document.getElementById('edit_product_id').value = prod.id;
     document.getElementById('edit_name').value = prod.name;
+    document.getElementById('edit_tamil_name').value = prod.tamil_name || '';
     document.getElementById('edit_category_id').value = prod.category_id;
     document.getElementById('edit_subcategory_id').value = prod.subcategory_id || '';
     document.getElementById('edit_default_unit').value = prod.default_unit || '';
