@@ -1,0 +1,57 @@
+# ==============================================================================
+# DailyGurus Price List - Git Ignore
+# ==============================================================================
+
+# Database & SQLite Files (Production data must remain private)
+database/database.sqlite
+database/*.sqlite
+database/*.sqlite3
+database/*.db
+database/*.sql
+*.sqlite
+*.sqlite3
+*.db
+*.sql
+
+# Security, Certificates & Secrets
+*.pem
+*.key
+*.crt
+*.pfx
+.env
+.env.*
+credentials.json
+credentials/
+secrets/
+.cloudflared/
+
+# Logs & Session Files
+logs/
+*.log
+cookies.txt
+session_data/
+*.tmp
+*.temp
+
+# Backups
+backup/
+backups/
+*.bak
+*.old
+*~
+
+# Operating System & IDE Files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Runtime / Build artifacts (if any)
+node_modules/
+vendor/
+service/
+dist/
+build/
