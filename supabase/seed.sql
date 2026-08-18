@@ -530,14 +530,8 @@ ON CONFLICT (price_date, product_id) DO UPDATE SET
     price_notes = EXCLUDED.price_notes,
     updated_at = NOW();
 
--- 6. SEED ADMIN USER (Username: Reginald, Default Pass: 12481248)
--- Bcrypt hash generated for password "12481248":
-INSERT INTO public.admin_users (id, username, password_hash, email, role)
-VALUES (1, 'Reginald', '$2a$10$w09ZkM.30Qn2wzQ1iWj6Aev6K6XQvYg0ZkmzG9eJ8pU0s.3J2k.uG', 'admin@dailygurus.com', 'admin')
-ON CONFLICT (username) DO UPDATE SET
-    password_hash = EXCLUDED.password_hash,
-    email = EXCLUDED.email,
-    role = EXCLUDED.role;
+-- 6. ADMIN INITIALIZATION NOTE:
+-- Admin users are initialized securely via Supabase Auth or scripts/migrate_sqlite_to_supabase.js using INITIAL_ADMIN_PASSWORD environment variable.
 
 -- 7. RE-SYNC POSTGRESQL IDENTITY SEQUENCES
 SELECT setval(pg_get_serial_sequence('public.categories', 'id'), COALESCE(MAX(id), 1)) FROM public.categories;
