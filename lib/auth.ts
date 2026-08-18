@@ -4,8 +4,22 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from './supabase/admin';
 
+import crypto from 'crypto';
+
 export const ADMIN_COOKIE_NAME = 'dg_admin_session';
-const JWT_SECRET = process.env.ADMIN_JWT_SECRET || 'dailygurus-wholesale-admin-jwt-secret-key-2026-secure';
+
+// Cryptographically secure fallback if ADMIN_JWT_SECRET is not configured in env
+let runtimeSecret: string | null = null;
+function getJwtSecret(): string {
+  if (process.env.ADMIN_JWT_SECRET && process.env.ADMIN_JWT_SECRET.trim().length >= 16) {
+    return process.env.ADMIN_JWT_SECRET.trim();
+  }
+  if (!runtimeSecret) {
+    runtimeSecret = crypto.randomBytes(32).toString('hex');
+  }
+  return runtimeSecret;
+}
+
 const SESSION_DURATION_DAYS = 7;
 
 export interface AdminSessionPayload {
@@ -40,7 +54,7 @@ export async function comparePassword(plainText: string, hash: string): Promise<
  * Generate a signed JWT token for admin session
  */
 export function signAdminToken(payload: Omit<AdminSessionPayload, 'iat' | 'exp'>): string {
-  return jwt.sign(payload, JWT_SECRET, {
+  return jwt.sign(payload, getJwtSecret(), {
     expiresIn: `${SESSION_DURATION_DAYS}d`,
   });
 }
@@ -50,7 +64,7 @@ export function signAdminToken(payload: Omit<AdminSessionPayload, 'iat' | 'exp'>
  */
 export function verifyAdminToken(token: string): AdminSessionPayload | null {
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as AdminSessionPayload;
+    const decoded = jwt.verify(token, getJwtSecret()) as AdminSessionPayload;
     return decoded;
   } catch (err) {
     return null;
@@ -58,13 +72,13 @@ export function verifyAdminToken(token: string): AdminSessionPayload | null {
 }
 
 /**
- * Verify Admin credentials against Supabase admin_users table (with fallback for Reginald / 12481248)
+ * Verify Admin credentials against Supabase admin_users table
  */
 export async function verifyAdminCredentials(username: string, plainPassword: string): Promise<AdminSessionPayload | null> {
   const cleanUsername = username.trim();
   if (!cleanUsername || !plainPassword) return null;
 
-  // 1. Try querying Supabase admin_users table
+  // 1. Query Supabase admin_users table
   try {
     const { data: user, error } = await supabaseAdmin
       .from('admin_users')
@@ -93,14 +107,18 @@ export async function verifyAdminCredentials(username: string, plainPassword: st
     console.warn('Database admin query warning:', err);
   }
 
-  // 2. Default hardcoded admin fallback (Reginald / 12481248)
+  // 2. Offline / local development environment fallback (only if INITIAL_ADMIN_PASSWORD env is set)
+  const envAdminUser = process.env.ADMIN_USER || 'Reginald';
+  const envAdminPass = process.env.INITIAL_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+
   if (
-    cleanUsername.toLowerCase() === 'reginald' &&
-    plainPassword === '12481248'
+    envAdminPass &&
+    cleanUsername.toLowerCase() === envAdminUser.toLowerCase() &&
+    plainPassword === envAdminPass
   ) {
     return {
       userId: 1,
-      username: 'Reginald',
+      username: envAdminUser,
       role: 'admin',
     };
   }

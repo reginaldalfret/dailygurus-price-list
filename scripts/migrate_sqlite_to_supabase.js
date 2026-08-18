@@ -123,20 +123,26 @@ async function runMigration() {
   }
   console.log('   ✓ Daily prices migrated.');
 
-  // 6. Migrate Default Admin User
-  console.log('6. Seeding Admin credentials (Reginald)...');
-  const bcrypt = require('bcryptjs');
-  const hash = bcrypt.hashSync('12481248', 10);
-  const { error: adminErr } = await supabase.from('admin_users').upsert({
-    id: 1,
-    username: 'Reginald',
-    password_hash: hash,
-    email: 'admin@dailygurus.com',
-    role: 'admin'
-  }, { onConflict: 'username' });
+  // 6. Migrate Default Admin User (using environment-provided credentials or safe initialization)
+  const adminUser = process.env.ADMIN_USER || 'Reginald';
+  const adminPass = process.env.INITIAL_ADMIN_PASSWORD || process.env.ADMIN_PASSWORD;
+  if (adminPass) {
+    console.log(`6. Seeding Admin credentials (${adminUser})...`);
+    const bcrypt = require('bcryptjs');
+    const hash = bcrypt.hashSync(adminPass, 10);
+    const { error: adminErr } = await supabase.from('admin_users').upsert({
+      id: 1,
+      username: adminUser,
+      password_hash: hash,
+      email: 'admin@dailygurus.com',
+      role: 'admin'
+    }, { onConflict: 'username' });
 
-  if (adminErr) console.error('   Error seeding admin:', adminErr.message);
-  else console.log('   ✓ Admin user seeded.');
+    if (adminErr) console.error('   Error seeding admin:', adminErr.message);
+    else console.log('   ✓ Admin user seeded securely.');
+  } else {
+    console.log('6. Skipped admin password seeding (INITIAL_ADMIN_PASSWORD not set in env).');
+  }
 
   console.log('\n=== MIGRATION COMPLETED SUCCESSFULLY ===\n');
 }

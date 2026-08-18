@@ -12,6 +12,8 @@ database/*.sql
 *.sqlite3
 *.db
 *.sql
+!supabase/migrations/*.sql
+!supabase/seed.sql
 
 # Security, Certificates & Secrets
 *.pem
@@ -19,7 +21,10 @@ database/*.sql
 *.crt
 *.pfx
 .env
-.env.*
+.env.local
+.env.production
+.env.development
+!.env.example
 credentials.json
 credentials/
 secrets/
