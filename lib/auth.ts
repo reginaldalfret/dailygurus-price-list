@@ -8,16 +8,24 @@ import crypto from 'crypto';
 
 export const ADMIN_COOKIE_NAME = 'dg_admin_session';
 
-// Cryptographically secure fallback if ADMIN_JWT_SECRET is not configured in env
-let runtimeSecret: string | null = null;
+/**
+ * Retrieve stable JWT secret.
+ * In production, ADMIN_JWT_SECRET environment variable is strictly required.
+ */
 function getJwtSecret(): string {
-  if (process.env.ADMIN_JWT_SECRET && process.env.ADMIN_JWT_SECRET.trim().length >= 16) {
-    return process.env.ADMIN_JWT_SECRET.trim();
+  const secret = process.env.ADMIN_JWT_SECRET?.trim();
+  if (secret && secret.length >= 16) {
+    return secret;
   }
-  if (!runtimeSecret) {
-    runtimeSecret = crypto.randomBytes(32).toString('hex');
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'CRITICAL CONFIG ERROR: ADMIN_JWT_SECRET environment variable is missing or too short in production. Please set ADMIN_JWT_SECRET (min 16 chars) in Vercel project settings.'
+    );
   }
-  return runtimeSecret;
+
+  // Development-only stable fallback (strictly disabled in production)
+  return 'dev-local-only-dg-wholesale-secret-key-do-not-use-in-production';
 }
 
 const SESSION_DURATION_DAYS = 7;
