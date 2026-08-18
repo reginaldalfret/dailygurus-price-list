@@ -45,10 +45,16 @@ backups/
 *.old
 *~
 
-# Temporary scratch files and test profiles
+# Next.js Build Output
+.next/
+out/
+build/
+dist/
+
+# Scratch & Temporary Testing Directories
 scratch/
-scratch*/
-scratch_chrome_profile/
+scratch_*/
+.system_generated/
 scratch_screenshots/
 *.js.map
 *.css.map
